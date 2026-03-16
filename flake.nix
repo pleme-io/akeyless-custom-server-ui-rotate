@@ -7,16 +7,22 @@
       url = "github:pleme-io/substrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pleme-linker = {
+      url = "github:pleme-io/pleme-linker";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  # NOTE: buildNpmPackage fails — package-lock.json references a private npm registry.
-  # Build manually: npm install && node index.js
   outputs = inputs: (import "${inputs.substrate}/lib/repo-flake.nix" {
     inherit (inputs) nixpkgs flake-utils;
   }) {
     self = inputs.self;
-    language = "npm";
+    language = "typescript";
+    builder = "package";
+    pname = "akeyless-custom-server-ui-rotate";
+    plemeLinker = inputs.pleme-linker;
     description = "Node.js service for automating credential rotation on websites using the Akeyless Custom Rotator with Puppeteer";
+    homepage = "https://github.com/pleme-io/akeyless-custom-server-ui-rotate";
   };
 }
